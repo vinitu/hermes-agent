@@ -1,3 +1,4 @@
 ignored:
   - DL3007   # Using :latest is intentional — we always want the freshest hermes-agent base
   - DL3008   # Pinning apt versions is impractical for a rolling Debian base
+  - SC2015   # info-level; A && B || C pattern is intentionally used here

@@ -46,7 +46,6 @@ RUN ARCH=$(uname -m) && \
     esac && \
     curl -fsLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${KUBECTL_ARCH}/kubectl" && \
     chmod +x kubectl && \
-    mv kubectl /usr/local/bin/kubectl && \
-    kubectl version --client --no-interactive 2>/dev/null || true
+    mv kubectl /usr/local/bin/kubectl
 
 # Entry point is inherited from the base image — hermes gateway run
