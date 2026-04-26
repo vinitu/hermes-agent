@@ -1,6 +1,6 @@
 .PHONY: build build-arm64 build-amd64 push help
 
-IMAGE ?= ghcr.io/vinitu/hermes
+IMAGE ?= ghcr.io/vinitu/hermes-agent
 TAG  ?= latest
 
 build-arm64:
@@ -21,5 +21,5 @@ help:
 	@echo "  push          Push image to registry"
 	@echo ""
 	@echo "Variables:"
-	@echo "  IMAGE  Registry image name (default: ghcr.io/vinitu/hermes)"
+	@echo "  IMAGE  Registry image name (default: ghcr.io/vinitu/hermes-agent)"
 	@echo "  TAG    Image tag (default: latest)"

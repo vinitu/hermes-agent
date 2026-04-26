@@ -16,7 +16,7 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 ## Usage
 
 ```yaml
-image: ghcr.io/vinitu/hermes:v0.1.0
+image: ghcr.io/vinitu/hermes-agent:v0.1.0
 ```
 
 ## CI/CD
