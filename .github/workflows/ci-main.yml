@@ -110,7 +110,7 @@ jobs:
     needs:
       - create_tag
       - build-and-push
-    if: ${{ needs.build-and-push.result == 'success' }}
+    if: ${{ needs.build-and-push.result == 'success' && needs.create_tag.result == 'success' }}
     uses: vinitu/github-workflows/.github/workflows/workflow-create-release.yml@v0.1.9
     with:
       tag-name: ${{ needs.create_tag.outputs['new-tag'] }}
