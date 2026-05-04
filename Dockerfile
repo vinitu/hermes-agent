@@ -51,7 +51,7 @@ RUN ARCH=$(uname -m) && \
 
 # Install Python deps into the hermes venv (needed for Holographic memory provider)
 # hadolint ignore=DL3013
-RUN /opt/hermes/.venv/bin/pip install --no-cache-dir numpy
+RUN /opt/hermes/.venv/bin/python -m pip install --no-cache-dir numpy
 
 USER hermes
 
