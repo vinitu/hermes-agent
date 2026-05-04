@@ -49,10 +49,6 @@ RUN ARCH=$(uname -m) && \
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/kubectl
 
-# Install Python deps into the hermes venv (needed for Holographic memory provider)
-# hadolint ignore=DL3013
-RUN /opt/hermes/.venv/bin/python -m pip install --no-cache-dir numpy
-
 USER hermes
 
 # Entry point is inherited from the base image — hermes gateway run
