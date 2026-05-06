@@ -7,6 +7,7 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 | Tool | Purpose |
 |------|---------|
 | `curl`, `jq` | HTTP calls & JSON parsing |
+| `git`, `gh` | Git and GitHub CLI workflows |
 | `vim`, `nano` | Quick edits inside pod |
 | `htop`, `net-tools`, `iputils-ping` | Debugging |
 | `kubectl` (v1.32.3) | Kubernetes management |
@@ -16,12 +17,12 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 ## Usage
 
 ```yaml
-image: ghcr.io/vinitu/hermes-agent:v0.1.0
+image: ghcr.io/vinitu/hermes-agent:<release-tag>
 ```
 
 ## CI/CD
 
-Push a tag → GitHub Actions builds multi-arch image → pushes to GHCR.
+Push to `main` → GitHub Actions computes the next release tag → builds a multi-arch image → pushes the release tag and `latest` to GHCR.
 
 | Branch prefix | Version bump |
 |---------------|-------------|
