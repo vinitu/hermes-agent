@@ -32,7 +32,7 @@ jobs:
         run: hadolint Dockerfile
 
   calculate_tag:
-    name: Compute next tag
+    name: Compute image tag
     needs:
       - lint
     if: |
@@ -43,12 +43,55 @@ jobs:
       ) || (
         github.event_name == 'workflow_dispatch'
       )
-    uses: vinitu/github-workflows/.github/workflows/workflow-compute-next-tag.yml@v0.1.9
-    with:
-      target-branch: main
-      version-bump: patch
-    secrets:
-      gh_token: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    outputs:
+      new-tag: ${{ steps.tag.outputs.new-tag }}
+      previous-tag: ${{ steps.tag.outputs.previous-tag }}
+      base-tag: ${{ steps.tag.outputs.base-tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute tag from base Hermes image
+        id: tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          base_tag="$(sed -n 's/^FROM nousresearch\/hermes-agent:\([^[:space:]]*\).*/\1/p' Dockerfile)"
+          if [[ -z "$base_tag" ]]; then
+            echo "Could not find base Hermes image tag in Dockerfile" >&2
+            exit 1
+          fi
+
+          git fetch --tags --force
+
+          previous_tag="$(git tag --sort=-creatordate | head -n 1 || true)"
+
+          if ! git rev-parse -q --verify "refs/tags/${base_tag}" >/dev/null; then
+            new_tag="$base_tag"
+          else
+            latest_build="$(
+              git tag --list "${base_tag}-build.*" \
+                | sed -n "s/^${base_tag}-build\\.\\([0-9][0-9]*\\)$/\\1/p" \
+                | sort -n \
+                | tail -n 1
+            )"
+            if [[ -z "$latest_build" ]]; then
+              new_tag="${base_tag}-build.1"
+            else
+              new_tag="${base_tag}-build.$((latest_build + 1))"
+            fi
+          fi
+
+          echo "base-tag=${base_tag}" >> "$GITHUB_OUTPUT"
+          echo "new-tag=${new_tag}" >> "$GITHUB_OUTPUT"
+          echo "previous-tag=${previous_tag}" >> "$GITHUB_OUTPUT"
+          echo "Base Hermes tag: ${base_tag}"
+          echo "New image tag: ${new_tag}"
+          echo "Previous repository tag: ${previous_tag}"
 
   create_tag:
     name: Create git tag
@@ -56,13 +99,25 @@ jobs:
       - lint
       - calculate_tag
     if: ${{ needs.calculate_tag.result == 'success' }}
-    uses: vinitu/github-workflows/.github/workflows/workflow-create-tag.yml@v0.1.9
-    with:
-      target-branch: main
-      next-tag: ${{ needs.calculate_tag.outputs['new-tag'] }}
-      previous-tag: ${{ needs.calculate_tag.outputs['previous-tag'] }}
-    secrets:
-      gh_token: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    outputs:
+      new-tag: ${{ needs.calculate_tag.outputs.new-tag }}
+      previous-tag: ${{ needs.calculate_tag.outputs.previous-tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create and push tag
+        env:
+          NEW_TAG: ${{ needs.calculate_tag.outputs.new-tag }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$NEW_TAG" -m "$NEW_TAG"
+          git push origin "refs/tags/${NEW_TAG}"
 
   build-and-push:
     name: Build & Push Image

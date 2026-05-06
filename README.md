@@ -22,13 +22,15 @@ image: ghcr.io/vinitu/hermes-agent:<release-tag>
 
 ## CI/CD
 
-Push to `main` → GitHub Actions computes the next release tag → builds a multi-arch image → pushes the release tag and `latest` to GHCR.
+Push to `main` → GitHub Actions reads the upstream Hermes Agent tag from `Dockerfile` → builds a multi-arch image → pushes that release tag and `latest` to GHCR.
 
-| Branch prefix | Version bump |
-|---------------|-------------|
-| `major/` | major |
-| `feature/` | minor |
-| `fix/` | patch |
+If the upstream tag already exists in this repository, CI appends a build suffix:
+
+```text
+v2026.4.30
+v2026.4.30-build.1
+v2026.4.30-build.2
+```
 
 ## Build locally
 
