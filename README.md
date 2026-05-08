@@ -27,9 +27,9 @@ Push to `main` → GitHub Actions reads the upstream Hermes Agent tag from `Dock
 If the upstream tag already exists in this repository, CI appends a build suffix:
 
 ```text
-v2026.4.30
-v2026.4.30-build.1
-v2026.4.30-build.2
+v2026.5.7
+v2026.5.7-build.1
+v2026.5.7-build.2
 ```
 
 ## Build locally
