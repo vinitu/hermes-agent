@@ -2,6 +2,7 @@ FROM nousresearch/hermes-agent:v2026.5.7
 
 ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
+ARG AGENT_BROWSER_VERSION=0.27.0
 
 USER root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -55,7 +56,7 @@ RUN ARCH=$(uname -m) && \
     mv kubectl /usr/local/bin/kubectl
 
 # Install agent-browser globally and point it at the system Chromium binary.
-RUN npm install -g agent-browser
+RUN npm install -g "agent-browser@${AGENT_BROWSER_VERSION}"
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
