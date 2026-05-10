@@ -12,7 +12,10 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 | `htop`, `net-tools`, `iputils-ping` | Debugging |
 | `kubectl` (v1.32.3) | Kubernetes management |
 | `himalaya` (v1.2.0) | Email CLI |
+| `chromium` + `agent-browser` | Local browser automation for Hermes |
 | `python3` + pip, venv, requests, yaml | Python runtime |
+
+The image exports `AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium` so Hermes can use the system Chromium with `agent-browser` without downloading a separate Chrome bundle at runtime.
 
 ## Usage
 
@@ -22,7 +25,7 @@ image: ghcr.io/vinitu/hermes-agent:<release-tag>
 
 ## CI/CD
 
-Push to `main` → GitHub Actions reads the upstream Hermes Agent tag from `Dockerfile` → builds a multi-arch image → pushes that release tag and `latest` to GHCR.
+Push to `main` → GitHub Actions reads the upstream Hermes Agent tag from `Dockerfile` → builds an `arm64` image → pushes that release tag and `latest` to GHCR.
 
 If the upstream tag already exists in this repository, CI appends a build suffix:
 
@@ -36,5 +39,4 @@ v2026.5.7-build.2
 
 ```bash
 make build-arm64    # for homelab (ARM64)
-make build-amd64    # for AMD64
 ```

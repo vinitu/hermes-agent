@@ -14,11 +14,14 @@ RUN apt-get update && \
       git \
       gh \
       jq \
+      nodejs \
+      npm \
       vim \
       nano \
       htop \
       net-tools \
       iputils-ping \
+      chromium \
       python3-pip \
       python3-venv \
       python3-dev \
@@ -50,6 +53,11 @@ RUN ARCH=$(uname -m) && \
     curl -fsLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${KUBECTL_ARCH}/kubectl" && \
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/kubectl
+
+# Install agent-browser globally and point it at the system Chromium binary.
+RUN npm install -g agent-browser
+
+ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
 USER hermes
 
