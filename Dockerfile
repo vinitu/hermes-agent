@@ -55,11 +55,10 @@ RUN ARCH=$(uname -m) && \
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/kubectl
 
-# Install python-dotenv so the Kanban CLI (hermes kanban) works.
-RUN pip3 install --no-cache-dir --break-system-packages python-dotenv
-
-# Install agent-browser globally and point it at the system Chromium binary.
-RUN npm install -g "agent-browser@${AGENT_BROWSER_VERSION}"
+# Install python-dotenv so the Kanban CLI (hermes kanban) works,
+# and agent-browser globally for Hermes browser automation.
+RUN pip3 install --no-cache-dir --break-system-packages "python-dotenv==1.2.2" \
+    && npm install -g "agent-browser@${AGENT_BROWSER_VERSION}"
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
