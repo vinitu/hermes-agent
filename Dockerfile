@@ -4,6 +4,7 @@ ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
 ARG AGENT_BROWSER_VERSION=0.27.0
 ARG PI_PACKAGE=@earendil-works/pi-coding-agent
+ARG PI_VERSION=0.74.0
 
 USER root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -61,7 +62,7 @@ RUN ARCH=$(uname -m) && \
 # pi.dev (https://pi.dev) coding agent for the `coding` profile.
 RUN pip3 install --no-cache-dir --break-system-packages "python-dotenv==1.2.2" \
     && npm install -g "agent-browser@${AGENT_BROWSER_VERSION}" \
-    && npm install -g "${PI_PACKAGE}"
+    && npm install -g "${PI_PACKAGE}@${PI_VERSION}"
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
