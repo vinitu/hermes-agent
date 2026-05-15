@@ -3,6 +3,7 @@ FROM nousresearch/hermes-agent:v2026.5.7
 ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
 ARG AGENT_BROWSER_VERSION=0.27.0
+ARG PI_PACKAGE=@earendil-works/pi-coding-agent
 
 USER root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -56,9 +57,11 @@ RUN ARCH=$(uname -m) && \
     mv kubectl /usr/local/bin/kubectl
 
 # Install python-dotenv so the Kanban CLI (hermes kanban) works,
-# and agent-browser globally for Hermes browser automation.
+# agent-browser globally for Hermes browser automation, and
+# pi.dev (https://pi.dev) coding agent for the `coding` profile.
 RUN pip3 install --no-cache-dir --break-system-packages "python-dotenv==1.2.2" \
-    && npm install -g "agent-browser@${AGENT_BROWSER_VERSION}"
+    && npm install -g "agent-browser@${AGENT_BROWSER_VERSION}" \
+    && npm install -g "${PI_PACKAGE}"
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
