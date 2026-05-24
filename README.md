@@ -12,8 +12,12 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 | `htop`, `net-tools`, `iputils-ping` | Debugging |
 | `kubectl` (v1.32.3) | Kubernetes management |
 | `himalaya` (v1.2.0) | Email CLI |
-| `chromium` + `agent-browser` | Local browser automation for Hermes |
-| `python3` + pip, venv, requests, yaml, dotenv | Python runtime |
+| `shellcheck` (v0.10.0) | Shell script linter |
+| `bats` | Bash testing framework |
+| `nodejs` + `npm` | JavaScript runtime & package manager |
+| `chromium` + `agent-browser` (v0.27.0) | Local browser automation for Hermes |
+| `pi-coding-agent` (v0.74.0) | Coding agent profile ([pi.dev](https://pi.dev)) |
+| `python3` + pip, venv, requests, yaml, pytest, dotenv | Python runtime |
 
 The image exports `AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium` so Hermes can use the system Chromium with `agent-browser` without downloading a separate Chrome bundle at runtime.
 

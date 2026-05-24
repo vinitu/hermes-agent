@@ -2,6 +2,7 @@ FROM nousresearch/hermes-agent:v2026.5.16
 
 ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
+ARG SHELLCHECK_VERSION=v0.10.0
 ARG AGENT_BROWSER_VERSION=0.27.0
 ARG PI_PACKAGE=@earendil-works/pi-coding-agent
 ARG PI_VERSION=0.74.0
@@ -58,6 +59,16 @@ RUN ARCH=$(uname -m) && \
     curl -fsLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${KUBECTL_ARCH}/kubectl" && \
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/kubectl
+
+# Install shellcheck — detect arch at build time
+RUN ARCH=$(uname -m) && \
+    case "$ARCH" in \
+      aarch64) SHELLCHECK_ARCH="aarch64" ;; \
+      x86_64)  SHELLCHECK_ARCH="x86_64" ;; \
+      *)       echo "Unsupported arch: $ARCH" && exit 1 ;; \
+    esac && \
+    curl -fsSL "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.${SHELLCHECK_ARCH}.tar.xz" \
+      | tar xJ -C /usr/local/bin --strip-components=1 shellcheck-${SHELLCHECK_VERSION}/shellcheck
 
 # Install python-dotenv so the Kanban CLI (hermes kanban) works,
 # agent-browser globally for Hermes browser automation, and

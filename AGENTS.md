@@ -23,7 +23,7 @@ The repo is intentionally small:
 
 - Keep package installation non-interactive and clean up apt metadata in the same layer.
 - Prefer `--no-install-recommends` for apt packages unless a recommended dependency is required.
-- Keep architecture-specific install logic explicit, as done for `himalaya` and `kubectl`.
+- Keep architecture-specific install logic explicit, as done for `himalaya`, `kubectl`, and `shellcheck`.
 - If a tool depends on a system browser or runtime, configure it in the image so Hermes can use it without first-run setup.
 - Add short comments only where they explain non-obvious build decisions.
 
