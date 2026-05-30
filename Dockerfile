@@ -81,6 +81,6 @@ ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # Newer upstream Hermes images use s6-overlay and must start as root so
 # cont-init hooks can chown the data volume before services drop to hermes.
-USER root
+# Do not add a final USER here; upstream already leaves the image at root.
 
 # Entry point is inherited from the base image — hermes gateway run
