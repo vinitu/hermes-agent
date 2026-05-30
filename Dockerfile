@@ -79,6 +79,8 @@ RUN pip3 install --no-cache-dir --break-system-packages "python-dotenv==1.2.2" \
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 
-USER hermes
+# Newer upstream Hermes images use s6-overlay and must start as root so
+# cont-init hooks can chown the data volume before services drop to hermes.
+USER root
 
 # Entry point is inherited from the base image — hermes gateway run
