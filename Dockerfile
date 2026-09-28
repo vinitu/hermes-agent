@@ -73,9 +73,11 @@ RUN ARCH=$(uname -m) && \
 # Install python-dotenv so the Kanban CLI (hermes kanban) works,
 # agent-browser globally for Hermes browser automation, and
 # pi.dev (https://pi.dev) coding agent for the `coding` profile.
+# --prefix: upstream's npm is a symlink into its own node store under
+# /opt/hermes/tools, so a plain -g would put the binaries off PATH.
 RUN pip3 install --no-cache-dir --break-system-packages "python-dotenv==1.2.2" \
-    && npm install -g "agent-browser@${AGENT_BROWSER_VERSION}" \
-    && npm install -g "${PI_PACKAGE}@${PI_VERSION}"
+    && npm install -g --prefix /usr/local "agent-browser@${AGENT_BROWSER_VERSION}" \
+    && npm install -g --prefix /usr/local "${PI_PACKAGE}@${PI_VERSION}"
 
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 

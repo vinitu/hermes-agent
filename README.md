@@ -14,10 +14,10 @@ Pre-baked Docker image for [Hermes Agent](https://github.com/NousResearch/hermes
 | `himalaya` (v1.2.0) | Email CLI |
 | `shellcheck` (v0.10.0) | Shell script linter |
 | `bats` | Bash testing framework |
-| `nodejs` + `npm` | JavaScript runtime & package manager |
+| `nodejs` + `npm` | JavaScript runtime & package manager. On a `main` base, `node` and `npm` on `PATH` are upstream's (Node 26, npm 12); the Debian packages sit shadowed in `/usr/bin` |
 | `chromium` + `agent-browser` (v0.27.0) | Local browser automation for Hermes |
 | `pi-coding-agent` (v0.74.0) | Coding agent profile ([pi.dev](https://pi.dev)) |
-| `python3` + pip, venv, requests, yaml, pytest, dotenv | Python runtime |
+| `/usr/bin/python3` + pip, venv, requests, yaml, pytest, dotenv | Debian Python for scripts. On a `main` base, `python3` on `PATH` is the Hermes venv (3.14): it has requests and dotenv but **no PyYAML** — call `/usr/bin/python3` for anything that imports `yaml` |
 
 The image exports `AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium` so Hermes can use the system Chromium with `agent-browser` without downloading a separate Chrome bundle at runtime.
 
