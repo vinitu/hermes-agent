@@ -60,10 +60,30 @@ jobs:
         run: |
           set -euo pipefail
 
-          base_tag="$(sed -n 's/^FROM nousresearch\/hermes-agent:\([^[:space:]]*\).*/\1/p' Dockerfile)"
+          base_ref="$(sed -n 's/^FROM nousresearch\/hermes-agent:\([^[:space:]]*\).*/\1/p' Dockerfile)"
+          base_tag="${base_ref%%@*}"
           if [[ -z "$base_tag" ]]; then
             echo "Could not find base Hermes image tag in Dockerfile" >&2
             exit 1
+          fi
+
+          # `main` is a moving upstream build, so it must be pinned by digest and the
+          # image is named after the upstream commit it was built from. A git tag
+          # called plain `main` would also clash with the branch.
+          if [[ "$base_tag" == "main" ]]; then
+            if [[ "$base_ref" != *@sha256:* ]]; then
+              echo "FROM nousresearch/hermes-agent:main must be pinned: main@sha256:<index digest>" >&2
+              exit 1
+            fi
+            revision="$(
+              docker buildx imagetools inspect "nousresearch/hermes-agent:${base_ref}" --format '{{json .Image}}' \
+                | jq -r '."linux/arm64".config.Labels["org.opencontainers.image.revision"] // empty'
+            )"
+            if [[ -z "$revision" ]]; then
+              echo "Could not read the upstream revision label of nousresearch/hermes-agent:${base_ref}" >&2
+              exit 1
+            fi
+            base_tag="main-${revision:0:9}"
           fi
 
           git fetch --tags --force

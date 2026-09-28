@@ -48,6 +48,7 @@ make build-arm64
 - PR workflow only determines version bump and can auto-merge matching PRs.
 - Pushes to `main` lint the Dockerfile, compute a release tag from the upstream Hermes tag, build/push an `arm64` image, and publish a GitHub release.
 - Repository tags may be either the upstream Hermes tag itself or `<base-tag>-build.N` if that tag already exists in this repo.
+- A base of upstream `main` must be pinned as `main@sha256:<index digest>`; its tag is `main-<9-char upstream revision>`, read from the base image's `org.opencontainers.image.revision` label.
 
 ## Common Tasks
 

@@ -39,6 +39,17 @@ v2026.5.7-build.1
 v2026.5.7-build.2
 ```
 
+To build on the upstream `main` branch instead of a release, pin it by the multi-arch index digest:
+
+```dockerfile
+FROM nousresearch/hermes-agent:main@sha256:<index digest>
+```
+
+CI then names the image after the upstream commit in the base image's
+`org.opencontainers.image.revision` label, for example `main-b23b8bcf7`. An unpinned `main` fails
+the build: the tag would not say which upstream commit is inside. Get the digest with
+`docker buildx imagetools inspect nousresearch/hermes-agent:main`.
+
 ## Build locally
 
 ```bash
