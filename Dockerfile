@@ -1,4 +1,4 @@
-FROM nousresearch/hermes-agent:main@sha256:4b54ab85223a387b0de0bddfc39d71b08a5fc3f3bd72ebbcb00c19604751d696
+FROM nousresearch/hermes-agent:v0.21.6
 
 ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
