@@ -1,4 +1,4 @@
-FROM nousresearch/hermes-agent:v0.22.4
+FROM nousresearch/hermes-agent:v0.22.5
 
 ARG HIMALAYA_VERSION=v1.2.0
 ARG KUBECTL_VERSION=v1.32.3
